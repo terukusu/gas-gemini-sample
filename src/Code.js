@@ -155,39 +155,67 @@ function testImageGenerate() {
     const result = client.simpleImageGeneration("犬を描いてください。", params);
     Logger.log("生成された画像データ: " + result.substring(0, 100) + "...");
     
-    // data:image/jpeg;base64,xxxxx 形式から base64 部分を抽出
-    if (result.startsWith("data:image/")) {
-      const base64Data = result.split(",")[1];
-      const mimeType = result.split(";")[0].split(":")[1];
-      
-      // 拡張子を決定
-      let extension = "jpg";
-      if (mimeType === "image/png") extension = "png";
-      else if (mimeType === "image/webp") extension = "webp";
-      
-      // Base64データをBlobに変換
-      const bytes = Utilities.base64Decode(base64Data);
-      const blob = Utilities.newBlob(bytes, mimeType, `generated_image_${new Date().getTime()}.${extension}`);
-      
-      // マイドライブに保存
-      const file = DriveApp.createFile(blob);
-      
-      // ファイルを誰でも閲覧可能に設定
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      
-      // ファイル情報をログ出力
-      Logger.log("画像をマイドライブに保存しました:");
-      Logger.log("ファイル名: " + file.getName());
-      Logger.log("ファイルID: " + file.getId());
-      Logger.log("ファイルURL: " + file.getUrl());
-      Logger.log("直接表示URL: https://drive.google.com/file/d/" + file.getId() + "/view?usp=sharing");
-      
-    } else {
-      Logger.log("予期しない画像データ形式: " + result);
+    // 生成された画像をドライブに保存
+    const file = saveImageDataToDrive(result, "generated_dog_image");
+    if (file) {
+      Logger.log("画像生成とドライブ保存が完了しました！");
     }
     
   } catch (error) {
     Logger.log("画像生成エラー: " + error.message);
+  }
+}
+
+/**
+ * Base64画像データをGoogleドライブに保存する汎用関数
+ * @param {string} imageDataUri - data:image/jpeg;base64,xxxxx 形式の画像データ
+ * @param {string} baseFileName - ファイル名のベース（拡張子は自動追加）
+ * @return {File|null} 保存されたファイルオブジェクト、失敗時はnull
+ */
+function saveImageDataToDrive(imageDataUri, baseFileName = "generated_image") {
+  try {
+    if (!imageDataUri || !imageDataUri.startsWith("data:image/")) {
+      Logger.log("無効な画像データ形式: " + imageDataUri);
+      return null;
+    }
+    
+    // data:image/jpeg;base64,xxxxx 形式から base64 部分を抽出
+    const base64Data = imageDataUri.split(",")[1];
+    const mimeType = imageDataUri.split(";")[0].split(":")[1];
+    
+    // 拡張子を決定
+    let extension = "jpg";
+    if (mimeType === "image/png") extension = "png";
+    else if (mimeType === "image/webp") extension = "webp";
+    else if (mimeType === "image/gif") extension = "gif";
+    
+    // タイムスタンプ付きファイル名生成
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    const fileName = `${baseFileName}_${timestamp}.${extension}`;
+    
+    // Base64データをBlobに変換
+    const bytes = Utilities.base64Decode(base64Data);
+    const blob = Utilities.newBlob(bytes, mimeType, fileName);
+    
+    // マイドライブに保存
+    const file = DriveApp.createFile(blob);
+    
+    // ファイルを誰でも閲覧可能に設定
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    
+    // ファイル情報をログ出力
+    Logger.log("=== 画像をマイドライブに保存しました ===");
+    Logger.log("ファイル名: " + file.getName());
+    Logger.log("ファイルID: " + file.getId());
+    Logger.log("ファイルURL: " + file.getUrl());
+    Logger.log("直接表示URL: https://drive.google.com/file/d/" + file.getId() + "/view?usp=sharing");
+    Logger.log("==========================================");
+    
+    return file;
+    
+  } catch (error) {
+    Logger.log("ドライブ保存エラー: " + error.message);
+    return null;
   }
 }
 
