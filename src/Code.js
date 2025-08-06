@@ -299,8 +299,23 @@ function testDetailedResponse() {
   try {
     const result = client.generateContent("宇宙について教えて", {
       temperature: 0.5,
-      maxTokens: 1000
+      maxTokens: 2000  // トークン数を増加
     });
+    
+    // MAX_TOKENSエラーの場合はpartsが空または未定義
+    if (!result.candidates[0].content.parts || result.candidates[0].content.parts.length === 0) {
+      const finishReason = result.candidates[0].finishReason;
+      if (finishReason === "MAX_TOKENS") {
+        Logger.log("レスポンスがトークン上限に達しました。maxTokensを増やしてください。");
+        Logger.log("Usage info:", result.usageMetadata);
+        Logger.log("Safety ratings:", result.candidates[0].safetyRatings);
+        return;
+      } else {
+        Logger.log("レスポンスが生成されませんでした。理由:", finishReason);
+        Logger.log("Safety ratings:", result.candidates[0].safetyRatings);
+        return;
+      }
+    }
     
     Logger.log("Generated text:", result.candidates[0].content.parts[0].text);
     Logger.log("Usage info:", result.usageMetadata);
