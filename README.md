@@ -2,11 +2,29 @@
 
 Google Apps Script用のGeminiクライアントライブラリの使用例です。
 
+## claspプロジェクト構成
+
+このプロジェクトはclasp（Google Apps Script CLI）を使用して管理されています。
+
 ## 前提条件
 
-1. [gas-gemini](../gas-gemini/)をライブラリとして追加
-2. Google Gemini APIキーを取得し、PropertiesServiceに設定
-3. appsscript.jsonのライブラリIDを実際のgas-geminiのScript IDに変更
+1. clasp CLIのインストール: `npm install -g @google/clasp`
+2. [gas-gemini](../gas-gemini/)をライブラリとして追加
+3. Google Gemini APIキーを取得し、PropertiesServiceに設定
+4. clasp_dev.json / clasp_prod.jsonのscriptIdを設定
+
+## デプロイ方法
+
+```bash
+# 開発環境へデプロイ
+./build.sh -t dev -d
+
+# 本番環境へデプロイ  
+./build.sh -t prod -d
+
+# ビルドのみ（デプロイしない）
+./build.sh -t dev
+```
 
 ## APIキーの設定
 
