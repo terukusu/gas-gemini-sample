@@ -307,19 +307,19 @@ function testDetailedResponse() {
       const finishReason = result.candidates[0].finishReason;
       if (finishReason === "MAX_TOKENS") {
         Logger.log("レスポンスがトークン上限に達しました。maxTokensを増やしてください。");
-        Logger.log("Usage info:", result.usageMetadata);
-        Logger.log("Safety ratings:", result.candidates[0].safetyRatings);
+        Logger.log("Usage info: " + JSON.stringify(result.usageMetadata));
+        Logger.log("Safety ratings: " + JSON.stringify(result.candidates[0].safetyRatings));
         return;
       } else {
-        Logger.log("レスポンスが生成されませんでした。理由:", finishReason);
-        Logger.log("Safety ratings:", result.candidates[0].safetyRatings);
+        Logger.log("レスポンスが生成されませんでした。理由: " + finishReason);
+        Logger.log("Safety ratings: " + JSON.stringify(result.candidates[0].safetyRatings));
         return;
       }
     }
     
-    Logger.log("Generated text:", result.candidates[0].content.parts[0].text);
-    Logger.log("Usage info:", result.usageMetadata);
-    Logger.log("Safety ratings:", result.candidates[0].safetyRatings);
+    Logger.log("Generated text: " + result.candidates[0].content.parts[0].text);
+    Logger.log("Usage info: " + JSON.stringify(result.usageMetadata));
+    Logger.log("Safety ratings: " + JSON.stringify(result.candidates[0].safetyRatings));
     // 詳細なレスポンス情報を確認できる
   } catch (error) {
     Logger.log("詳細レスポンス取得エラー: " + error.message);
