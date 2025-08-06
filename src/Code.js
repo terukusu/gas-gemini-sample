@@ -108,7 +108,7 @@ function testImage() {
       model: "gemini-2.5-flash", // 最新マルチモーダル対応モデル
       images: [myImage.getBlob()],
       temperature: 0.4,  // 画像分析は低温度推奨
-      maxTokens: 1000
+      maxTokens: 4000    // 画像分析には十分なトークン数を設定
     };
 
     const result = client.simpleChat("この画像を詳しく解説してください。", params);
@@ -127,7 +127,7 @@ function testVideo() {
     const params = {
       model: "gemini-2.5-flash", // 最新動画分析対応モデル
       temperature: 0.3,
-      maxTokens: 2000,
+      maxTokens: 4000,  // 動画分析には十分なトークン数を設定
       safetySettings: [  // 動画用の安全設定
         {
           category: "HARM_CATEGORY_DANGEROUS_CONTENT",
