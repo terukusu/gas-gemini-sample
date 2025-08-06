@@ -41,8 +41,8 @@ Google Apps Script用のGeminiクライアントライブラリの使用例で�
 
 ### 画像・動画機能
 - `testImage()` - 画像分析（Drive上のファイル）
-- `testVideo()` - 動画分析（Gemini独自機能）
-- `testImageGenerate()` - 画像生成（Imagen4）
+- `testVideo()` - 動画分析
+- `testImageGenerate()` - 画像生成（Gemini 2.0）
 
 ### 高度な機能
 - `testToolUse()` - Tool Use（関数呼び出し）
@@ -73,15 +73,6 @@ Google Apps Script用のGeminiクライアントライブラリの使用例で�
   - `"public"`: 誰でも閲覧可能（⚠️注意が必要）
 - **機密情報**: 生成された画像に機密情報が含まれる可能性があるため、共有設定は慎重に行ってください
 
-## OpenAI版との違い
-
-| 機能 | OpenAI | Gemini | 備考 |
-|------|--------|--------|------|
-| テキスト生成 | `simpleChat` | `simpleChat` | 同じインターフェース |
-| Function Calling | `functions` | `tools` | パラメータ名が異なる |
-| 画像生成 | DALL-E | Imagen4 | モデル指定が異なる |
-| 動画分析 | ❌ | ✅ | Gemini独自機能 |
-| 音声文字起こし | ✅ | ❌ | Geminiは非対応 |
 
 ## モデル設定例
 
