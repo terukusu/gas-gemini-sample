@@ -170,9 +170,10 @@ function testImageGenerate() {
  * Base64画像データをGoogleドライブに保存する汎用関数
  * @param {string} imageDataUri - data:image/jpeg;base64,xxxxx 形式の画像データ
  * @param {string} baseFileName - ファイル名のベース（拡張子は自動追加）
+ * @param {string} sharingLevel - 共有レベル: 'private'(所有者のみ), 'domain'(組織内), 'public'(誰でも)
  * @return {File|null} 保存されたファイルオブジェクト、失敗時はnull
  */
-function saveImageDataToDrive(imageDataUri, baseFileName = "generated_image") {
+function saveImageDataToDrive(imageDataUri, baseFileName = "generated_image", sharingLevel = "private") {
   try {
     if (!imageDataUri || !imageDataUri.startsWith("data:image/")) {
       Logger.log("無効な画像データ形式: " + imageDataUri);
@@ -200,8 +201,17 @@ function saveImageDataToDrive(imageDataUri, baseFileName = "generated_image") {
     // マイドライブに保存
     const file = DriveApp.createFile(blob);
     
-    // ファイルを誰でも閲覧可能に設定
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    // 共有レベルに応じて設定
+    if (sharingLevel === "public") {
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      Logger.log("⚠️  警告: ファイルを誰でも閲覧可能に設定しました");
+    } else if (sharingLevel === "domain") {
+      file.setSharing(DriveApp.Access.DOMAIN_WITH_LINK, DriveApp.Permission.VIEW);
+      Logger.log("ℹ️  ファイルを組織内で共有可能に設定しました");
+    } else {
+      // デフォルト: private（所有者のみアクセス可能）
+      Logger.log("🔒 ファイルは非公開（所有者のみ）に設定されています");
+    }
     
     // ファイル情報をログ出力
     Logger.log("=== 画像をマイドライブに保存しました ===");
