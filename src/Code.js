@@ -148,8 +148,8 @@ function testVideo() {
 function testImageGenerate() {
   try {
     const params = {
-      model: "imagen-3.0-generate-001", // 画像生成を使うときはこのモデルを指定
-      aspectRatio: "1:1" // アスペクト比を指定（Gemini独自）
+      model: "gemini-2.0-flash-preview-image-generation", // Gemini 2.0の画像生成モデル
+      // aspectRatio: "1:1" // 現在は未対応のため一時的にコメントアウト
     };
 
     const result = client.simpleImageGeneration("犬を描いてください。", params);
