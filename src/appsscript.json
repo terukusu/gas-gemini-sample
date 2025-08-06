@@ -4,7 +4,7 @@
   "runtimeVersion": "V8",
   "dependencies": {
     "libraries": [{
-      "userSymbol": "GeminiLib",
+      "userSymbol": "GASGemini",
       "libraryId": "YOUR_GEMINI_LIBRARY_SCRIPT_ID",
       "version": "1",
       "developmentMode": true

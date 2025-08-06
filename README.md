@@ -62,7 +62,7 @@ Google Apps Script用のGeminiクライアントライブラリの使用例で�
 - Tool Use機能では実際に関数が実行されるため、副作用に注意してください
 - APIレート制限に注意し、大量のリクエストを短時間で実行しないでください
 - 全ての関数にエラーハンドリングを実装済み（try-catch文）
-- ライブラリの参照には`GeminiLib.createGeminiClient()`を使用してください
+- ライブラリの参照には`GASGemini.createGeminiClient()`を使用してください
 
 ## OpenAI版との違い
 
@@ -78,14 +78,30 @@ Google Apps Script用のGeminiクライアントライブラリの使用例で�
 
 ```javascript
 // 高性能モデル（コスト高）
-const client = createGeminiClient({
+const client = GASGemini.createGeminiClient({
   apiKey: GEMINI_API_KEY,
   model: 'gemini-2.5-pro'
 });
 
 // 高速モデル（コスト低）
-const client = createGeminiClient({
+const client = GASGemini.createGeminiClient({
   apiKey: GEMINI_API_KEY,
   model: 'gemini-2.5-flash'
 });
+```
+
+## ライブラリ参照設定
+
+appsscript.jsonで以下のように設定してください：
+
+```json
+{
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "GASGemini",
+      "libraryId": "YOUR_GEMINI_LIBRARY_SCRIPT_ID",
+      "version": "1"
+    }]
+  }
+}
 ```
