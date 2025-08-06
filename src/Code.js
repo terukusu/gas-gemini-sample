@@ -281,10 +281,10 @@ function testParameterOverride() {
     });
 
     // この呼び出しのみ高い創造性で実行
-    const result = client.simpleChat("詩を書いて", {
+    const result = client.simpleChat("短い詩を書いて", {
       temperature: 1.2,  // デフォルトの0.7を上書き
-      maxTokens: 500,
-      topP: 0.9         // デフォルトの0.95を上書き
+      maxTokens: 1000,   // 詩生成には十分なトークン数
+      topP: 0.9          // デフォルトの0.95を上書き
     });
     
     Logger.log(result);
