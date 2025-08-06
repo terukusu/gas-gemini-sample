@@ -1,6 +1,6 @@
 const GEMINI_API_KEY = PropertiesService.getScriptProperties().getProperty('api_key');
 
-const client = createGeminiClient({
+const client = GASGemini.createGeminiClient({
   apiKey: GEMINI_API_KEY,
   model: 'gemini-2.5-flash',  // 最新の2.5モデル
   temperature: 0.7,
@@ -203,7 +203,7 @@ function testBatchEmbeddings() {
 function testParameterOverride() {
   try {
     // インスタンス作成時のデフォルト設定
-    const client = createGeminiClient({
+    const client = GASGemini.createGeminiClient({
       apiKey: GEMINI_API_KEY,
       model: 'gemini-2.5-flash',
       temperature: 0.7,
